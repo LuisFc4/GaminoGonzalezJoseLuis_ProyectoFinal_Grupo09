@@ -6,12 +6,14 @@
 #include <SOIL2/SOIL2.h>
 #include <iostream>
 
+#include <vector>
 #include "Skybox.h"
 #include "Camera.h"
 #include "Model.h"
 #include "Shader.h"
-#include "Mesa.cpp"
-#include "Animaciones.cpp"
+#include "Mesa.h"
+#include "Animaciones.h"
+#include "KeyFrameAnimation.h"
 
 const GLuint WIDTH = 1093, HEIGHT = 615;
 int SCREEN_WIDTH, SCREEN_HEIGHT;
@@ -31,13 +33,14 @@ bool keys[1024];
 GLdouble lastX = 400, lastY = 300;
 bool firstMouse = true;
 
+using namespace std;
 //DEFINIENDO ANIMACIONES
 Animaciones::aPuerta animacion_puerta(&deltaTime);
 Animaciones::aPuertaRefri animacion_puerta_refri(&deltaTime);
 Animaciones::aGrifo animacion_grifo(&deltaTime);
-
-
-using namespace std;
+//DEFINIENDO ANIMACIONES COMPLEJAS
+Keyframe::KeyFrameAnimation animacion_compleja_1(25);
+Keyframe::KeyFrameAnimation animacion_compleja_2(40);
 int main() {
     glfwInit();
     // Set all the required options for GLFW
@@ -94,6 +97,32 @@ int main() {
     glm::mat4 projection = glm::perspective(camera.GetZoom(), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
 
     GLfloat lastFrame = 0.0f;
+    //DEFNIENDO KEYFRAMES
+    std::vector<Keyframe::Frame> frame_list = std::vector<Keyframe::Frame>();
+    frame_list.push_back(Keyframe::Frame(0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000, 0.000000f));
+    frame_list.push_back(Keyframe::Frame(0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000, 0.000000f));
+    frame_list.push_back(Keyframe::Frame(0.000000f, 0.000000f, 0.000000f, 0.000000f, 0.000000, 0.000000f));
+    frame_list.push_back(Keyframe::Frame(0.001068f, 0.000000f, -1.203265f, 75.311279f, 55.233765, 0.000000f));
+    frame_list.push_back(Keyframe::Frame(0.001068f, -2.342072f, -1.503601f, 75.311279f, 55.233765, 0.000000f));
+    frame_list.push_back(Keyframe::Frame(0.001068f, -4.850464f, -1.503601f, 75.311279f, 55.233765, 0.000000f));
+    frame_list.push_back(Keyframe::Frame(0.001068f, -4.850464f, -2.172241f, 145.564270f, 65.290833, 4.920959f));
+    frame_list.push_back(Keyframe::Frame(0.001068f, -4.850464f, -3.340912f, 145.564270f, 205.590820, 4.920959f));
+    frame_list.push_back(Keyframe::Frame(0.001068f, -4.850464f, -3.50f, 145.564270f, 250.00, 4.920959f));
+    frame_list.push_back(Keyframe::Frame(0.001068f, -4.850464f, -4.00f, 145.564270f, 360.00, 4.920959f));
+    frame_list.push_back(Keyframe::Frame(0.001068f, -4.850464f, -4.00f, 145.564270f, 360.00, 4.920959f));
+    frame_list.push_back(Keyframe::Frame(0.001068f, -4.850464f, -4.00f, 145.564270f, 360.00, 4.920959f));
+    animacion_compleja_1.setAnimation(frame_list);
+
+    frame_list.clear();
+    frame_list.push_back(Keyframe::Frame(0.00f, 0.00f, 0.00f, 0.00f, 0.00f, 0.00f));
+    frame_list.push_back(Keyframe::Frame(0.00f, 0.00f, 0.00f, -14.53f, 19.79f, 15.30f));
+    frame_list.push_back(Keyframe::Frame(0.00f, 0.00f, 0.00f, -9.68f, 130.89f, 35.60f));
+    frame_list.push_back(Keyframe::Frame(0.00f, 0.00f, 0.00f, -9.70f, 34.74f, 59.74f));
+    frame_list.push_back(Keyframe::Frame(0.00f, 0.00f, 0.00f, -4.49f, -15.82f, 59.74f));
+    frame_list.push_back(Keyframe::Frame(0.00f, 0.00f, 0.00f, -4.49f, -45.26f, 59.66f));
+    frame_list.push_back(Keyframe::Frame(0.00f, 0.00f, 0.00f, -4.49f, -45.26f, 59.66f));
+    animacion_compleja_2.setAnimation(frame_list);
+
     //CARGANDO SHADERS
     Shader material_shader("shaders/phong_texture.vs","shaders/phong_texture.frag");
     Shader SkyBoxshader("shaders/SkyBox.vs", "shaders/SkyBox.frag");
@@ -116,6 +145,7 @@ int main() {
     Model puerta((GLchar*)"models/puerta.obj");
     Model isla((GLchar*)"models/isla.obj");
     Model taza((GLchar*)"models/taza.obj");
+    Model esfera((GLchar*)"models/esfera.obj");
     
     //CARGANDO CUBOS PARA MODELADO EN TIEMPO DE EJECUCION
     Mesa mi_mesa=Mesa((GLchar*) "models/texturas/negro.jpg");
@@ -170,6 +200,7 @@ int main() {
 
         model = glm::mat4(1);
         model = glm::translate(model, glm::vec3(13.22f, 5.34f, 0.73f));
+        animacion_compleja_2.play(&model);
         glUniformMatrix4fv(glGetUniformLocation(material_shader.Program, "model"),
             1, GL_FALSE, glm::value_ptr(model));
         lamp.Draw(material_shader);
@@ -279,7 +310,6 @@ int main() {
         model = glm::mat4(1);
         model = glm::translate(model, glm::vec3(-4.1843f, 2.7264f, -9.5062f));
         model = glm::scale(model, glm::vec3(2 * 0.289f, 2 * 0.64f, 2 * 0.289f));
-
         glUniformMatrix4fv(glGetUniformLocation(material_shader.Program, "model"),
             1, GL_FALSE, glm::value_ptr(model));
         mi_pata.draw();
@@ -301,6 +331,14 @@ int main() {
         glUniformMatrix4fv(glGetUniformLocation(material_shader.Program, "model"),
             1, GL_FALSE, glm::value_ptr(model));
         mi_pata.draw();
+
+        model = glm::mat4(1);
+        model = glm::translate(model, glm::vec3(7.57f, 7.26f, 9.75f));
+        //model = glm::translate(model, glm::vec3(0.0f, 7.26f, 0.0f));
+        animacion_compleja_1.play(&model);
+        glUniformMatrix4fv(glGetUniformLocation(material_shader.Program, "model"),
+            1, GL_FALSE, glm::value_ptr(model));
+        esfera.Draw(material_shader);
 
         model = glm::mat4(1);
         glUniformMatrix4fv(glGetUniformLocation(material_shader.Program, "model"),
@@ -339,16 +377,6 @@ void DoMovement()
     {
         camera.ProcessKeyboard(RIGHT, deltaTime);
     }
-    /*Agregando movimiento en el eje y*/
-
-    if (keys[GLFW_KEY_UP])
-    {
-        camera.ProcessKeyboard(UP, deltaTime);
-    }
-    if (keys[GLFW_KEY_DOWN])
-    {
-        camera.ProcessKeyboard(DOWN, deltaTime);
-    }
 }
 
 // Is called whenever a key is pressed/released via GLFW
@@ -374,6 +402,13 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
     }
     if (keys[GLFW_KEY_3]) {
         animacion_grifo.running = true;
+    }
+    if (keys[GLFW_KEY_4]) {
+        animacion_puerta_refri.running = true;
+        animacion_compleja_1.start();
+    }
+    if (keys[GLFW_KEY_5]) {
+        animacion_compleja_2.start();
     }
 }
 

@@ -1,3 +1,4 @@
+#pragma once
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -22,7 +23,6 @@ namespace Animaciones {
                     if (rotacion < 90)
                         rotacion += velocidad * (*deltatime);
                     else {
-                        puts("Cmbiando a estado 2");
                         estado = 2;
                     }
 
@@ -30,7 +30,6 @@ namespace Animaciones {
                 case 2:
                     if (rotacion > 0) {
                         rotacion -= velocidad * (*deltatime);
-                        puts("LLendo en sentido contrario");
                     }
                         
                     else {
@@ -64,7 +63,6 @@ namespace Animaciones {
                     if (rotacion < 150)
                         rotacion += velocidad * (*deltatime);
                     else {
-                        puts("Cmbiando a estado 2");
                         estado = 2;
                     }
 
@@ -72,7 +70,6 @@ namespace Animaciones {
                 case 2:
                     if (rotacion > 0) {
                         rotacion -= velocidad * (*deltatime);
-                        puts("LLendo en sentido contrario");
                     }
 
                     else {
@@ -105,7 +102,6 @@ namespace Animaciones {
                     if (rotacion < 90)
                         rotacion += velocidad * (*deltatime);
                     else {
-                        puts("Cmbiando a estado 2");
                         estado = 2;
                     }
 
@@ -113,7 +109,6 @@ namespace Animaciones {
                 case 2:
                     if (rotacion > 0) {
                         rotacion -= velocidad * (*deltatime);
-                        puts("LLendo en sentido contrario");
                     }
 
                     else {

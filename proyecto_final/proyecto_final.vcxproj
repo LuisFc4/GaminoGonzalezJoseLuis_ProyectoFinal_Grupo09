@@ -151,9 +151,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Animaciones.cpp" />
+    <ClCompile Include="Animaciones.h" />
+    <ClCompile Include="AnimationRecorder.h" />
+    <ClCompile Include="KeyFrameAnimation.h" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Mesa.cpp" />
+    <ClCompile Include="Mesa.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
