@@ -11,7 +11,7 @@
 #include "Camera.h"
 #include "Model.h"
 #include "Shader.h"
-#include "Mesa.h"
+#include "Cubo.h"
 #include "Animaciones.h"
 #include "KeyFrameAnimation.h"
 
@@ -148,8 +148,8 @@ int main() {
     Model esfera((GLchar*)"models/esfera.obj");
     
     //CARGANDO CUBOS PARA MODELADO EN TIEMPO DE EJECUCION
-    Mesa mi_mesa=Mesa((GLchar*) "models/texturas/negro.jpg");
-    Mesa mi_pata=Mesa((GLchar*)"models/texturas/blanco.jpg");
+    Cubo mi_mesa=Cubo((GLchar*) "models/texturas/negro.jpg");
+    Cubo mi_pata=Cubo((GLchar*)"models/texturas/blanco.jpg");
 
     // Game loop
     while (!glfwWindowShouldClose(window)){

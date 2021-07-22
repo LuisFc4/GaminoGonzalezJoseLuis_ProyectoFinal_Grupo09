@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <iostream>
 #include "Texture.h"
-class Mesa {
+class Cubo {
 private:
     GLuint VAO, VBO, EBO;
     int texture_id;
@@ -78,8 +78,7 @@ private:
     };
 
 public:
-    Mesa(GLchar* texture_path) {
-        std::cout<<"DB:Cargando textura desde Mesa contruct"<<std::endl;
+    Cubo(GLchar* texture_path) {
         this->texture_id = TextureLoading::LoadTexture(texture_path);
         //Creando buffers
         glGenVertexArrays(1, &this->VAO);

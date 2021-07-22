@@ -8,19 +8,20 @@ using namespace  std;
 namespace Keyframe{
     class Frame {
     public:
+        //Variables para interpolación
+        float incX;
+        float incY;
+        float incZ;
+        float rotXInc;
+        float rotYInc;
+        float rotZInc;
         //Variables para GUARDAR Key Frames
         float posX;
         float posY;
         float posZ;
-        float incX;
-        float incY;
-        float incZ;
         float rotX;
-        float rotXInc;
         float rotY;
-        float rotYInc;
         float rotZ;
-        float rotZInc;
         Frame(float _posX, float _posY, float _posZ,float _rotX, float _rotY, float _rotZ) {
             posX = _posX;
             posY = _posY;
@@ -39,37 +40,11 @@ namespace Keyframe{
         int i_max_steps;
         int i_curr_steps = 0;
         int playIndex = 0;
-        GLfloat* deltatime;
-    public:
         float posX, posY, posZ, incX, incY, incZ, rotX, rotXInc, rotY, rotYInc, rotZ, rotZInc;
         vector<Frame> KeyFrame;
         GLint FrameIndex = 0;
         bool running = false;
-
-        KeyFrameAnimation(int _i_max_steps = 120) {
-            KeyFrame = vector<Frame>();
-            //Initializing the animation
-            i_max_steps = _i_max_steps;
-        }
-
-        void start() {
-            if (!running) {
-                running = true;
-                reset();
-                interpolation();
-            }
-        }
-
-        void setAnimation(vector<Frame> frame_list) {
-            KeyFrame.clear();
-            KeyFrame.reserve(frame_list.size());
-            for (Frame new_frame : frame_list) {
-                KeyFrame.push_back(new_frame);
-            }
-        }
-
-        void resetElements(void)
-        {
+        void resetElements(void){
             posX = KeyFrame[0].posX;
             posY = KeyFrame[0].posY;
             posZ = KeyFrame[0].posZ;
@@ -94,6 +69,29 @@ namespace Keyframe{
             i_curr_steps = 0;
             resetElements();
         }
+    public:
+        KeyFrameAnimation(int _i_max_steps = 120) {
+            KeyFrame = vector<Frame>();
+            //Initializing the animation
+            i_max_steps = _i_max_steps;
+        }
+
+        void start() {
+            if (!running) {
+                running = true;
+                reset();
+                interpolation();
+            }
+        }
+
+        void setAnimation(vector<Frame> frame_list) {
+            KeyFrame.clear();
+            KeyFrame.reserve(frame_list.size());
+            for (Frame new_frame : frame_list) {
+                KeyFrame.push_back(new_frame);
+            }
+        }
+
         void play(glm::mat4* model) {
             //Movimiento del personaje
             if (running) {
